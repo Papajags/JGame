@@ -105,3 +105,23 @@ function drawImage(){
 setInterval(function(){
   drawImage();
 },100);
+
+
+function Start(){
+
+}
+
+
+class gameobject{
+  name;
+  quantity;
+  sprite;
+  id;
+  constructor(n,q,s){
+    name = n;
+    quantity = q;
+    s = sprite;
+  }
+
+
+}
