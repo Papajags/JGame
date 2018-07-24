@@ -31,7 +31,9 @@ document.addEventListener("keyup",function(e){
 current_anim = 0;
 });
 
-
+document.addEventListener("DOMContentLoaded",function(){
+assign_pos();
+});
 
 
 function lerp(a, b, t) {
@@ -65,6 +67,8 @@ var spritesheet = new Image();  // LOAD HUA SHEEY
 spritesheet.src = "player_sheet.png";
 var bg = new Image();
 bg.src = "bg.png";
+var OBJ_A = new Image();
+OBJ_A.src = "tree_A.png";
 var current_anim = 0; // ANIMATION PLAY  0-IDLE   1-WALK RIGHT   2-WALK LEFT 3-WALK UP 4-WALK DOWN
 var anim_data_column = new Array(1,9,9,9,9);
 var anim_data_row = new Array(10,11,9,8,10);
@@ -79,6 +83,22 @@ var row=0;
 var width = 64;
 var height =64;
 var currentframe = 0;
+
+
+var posx = [];
+var posy = [];
+var i;
+
+function assign_pos(){
+for ( i = 0 ; i <40 ; i ++){
+  posx[i] =(Math.random() * 2000) + 0;
+  posy[i] = (Math.random() * 1000)+84;
+  console.log(   posx[i] );
+
+}
+}
+
+
 
 function updateFrame(){
   srcX = currentframe * width;
@@ -95,28 +115,32 @@ if ( currentframe >=anim_data_column[current_anim] )
 
 function drawImage(){
   updateFrame();
-  context.drawImage(bg,0,0,800,500,-x,-y,5120/4,5120/4);
+//  context.translate(-x,-y);
+  context.drawImage(bg,0,0,3000,3000,-x,-y,3000,3000);
+
+for ( i = 0 ; i <40 ; i ++)
+ context.drawImage(OBJ_A, 0,0,84,145,-x+posx[i],-y+posy[i],84,145);
   context.drawImage(spritesheet,srcX,srcY,width,height,400,250,width,height);
 //  ct.translate(x,y);
-
-//context.drawImage(spritesheet,0,0,48,64,0,0,48,64);
-
 }
+
 setInterval(function(){
   drawImage();
 },100);
+//setInterval(function(){assign_pos();},1000);
+
+
 
 
 function Start(){
-
+  console.log("YEAA BITCH");
 }
 
-
 class gameobject{
-  name;
-  quantity;
-  sprite;
-  id;
+//  name;
+//  quantity;
+//  sprite;
+//  id;
   constructor(n,q,s){
     name = n;
     quantity = q;
@@ -124,4 +148,4 @@ class gameobject{
   }
 
 
-}
+};
