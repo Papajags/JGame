@@ -3,6 +3,7 @@
 
 const canvas = document.getElementById('screen');
 const context = canvas.getContext('2d');
+var collection = [];
 
 
 //MOVEMENT PHYSICS AND ANIMATION
@@ -32,7 +33,7 @@ current_anim = 0;
 });
 
 document.addEventListener("DOMContentLoaded",function(){
-assign_pos();
+Start();
 });
 
 
@@ -89,63 +90,75 @@ var posx = [];
 var posy = [];
 var i;
 
-function assign_pos(){
-for ( i = 0 ; i <40 ; i ++){
-  posx[i] =(Math.random() * 2000) + 0;
-  posy[i] = (Math.random() * 1000)+84;
-  console.log(   posx[i] );
+// function assign_pos(){
+// for ( i = 0 ; i <40 ; i ++){
+//   posx[i] =(Math.random() * 2000) + 0;
+//   posy[i] = (Math.random() * 1000)+84;
+//   console.log(   posx[i] );
+//
+// }
+// }
 
-}
-}
 
+//
+// function updateFrame(){
+//   srcX = currentframe * width;
+//   srcY = height*anim_data_row[current_anim] ;
+// //  currentframe = ++ currentframe% anim_data_column[current_anim];
+// currentframe ++;
+// if ( currentframe >=anim_data_column[current_anim] )
+//       currentframe = 0;
+//       context.clearRect(0,0,800,500);
+//
+// //context.clearRect(x,y,width,height);
+//
+// }
 
-
-function updateFrame(){
-  srcX = currentframe * width;
-  srcY = height*anim_data_row[current_anim] ;
-//  currentframe = ++ currentframe% anim_data_column[current_anim];
-currentframe ++;
-if ( currentframe >=anim_data_column[current_anim] )
-      currentframe = 0;
-      context.clearRect(0,0,800,500);
-
-//context.clearRect(x,y,width,height);
-
-}
-
-function drawImage(){
-  updateFrame();
-//  context.translate(-x,-y);
-  context.drawImage(bg,0,0,3000,3000,-x,-y,3000,3000);
-
-for ( i = 0 ; i <40 ; i ++)
- context.drawImage(OBJ_A, 0,0,84,145,-x+posx[i],-y+posy[i],84,145);
-  context.drawImage(spritesheet,srcX,srcY,width,height,400,250,width,height);
-//  ct.translate(x,y);
-}
+// function drawImage(){
+//   updateFrame();
+// //  context.translate(-x,-y);
+//   context.drawImage(bg,0,0,3000,3000,-x,-y,3000,3000);
+// for ( i = 0 ; i <40 ; i ++)
+//  context.drawImage(OBJ_A, 0,0,84,145,-x+posx[i],-y+posy[i],84,145);
+//   context.drawImage(spritesheet,srcX,srcY,width,height,400,250,width,height);
+// }
 
 setInterval(function(){
-  drawImage();
+  context.save();
+  context.translate(10,10);
+    context.restore();
+  console.log("wasaa");
+  //drawImage();
 },100);
-//setInterval(function(){assign_pos();},1000);
-
-
 
 
 function Start(){
-  console.log("YEAA BITCH");
+ context.drawImage(bg,0,0,3000,3000); //DRAW BACKGROUND
+
+for (i =0 ; i <100;i ++)
+new GameObject("tree",OBJ_A,(Math.random() * 1000),(Math.random() * 1000));
+
 }
 
-class gameobject{
-//  name;
-//  quantity;
-//  sprite;
-//  id;
-  constructor(n,q,s){
-    name = n;
-    quantity = q;
-    s = sprite;
-  }
 
 
-};
+
+
+
+
+
+
+function GameObject (name,sprite,xpos,ypos){
+    this.name = name;
+    this.sprite = sprite;
+    this.xpos = xpos;
+    this.ypos = ypos;
+
+    this.make =function(){
+        context.drawImage(this.sprite,this.xpos,this.ypos);
+        collection[collection.length+1] = this.GameObject;
+        this.id = collection.length;
+      }
+
+ this.make();
+}
