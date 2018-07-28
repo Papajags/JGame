@@ -14,110 +14,90 @@ let body = document.getElementsByTagName("body")[0];
 body.appendChild(canvas);
 const context = canvas.getContext('2d');
 
-//MOVEMENT PHYSICS AND ANIMATION
+
+
+
+
+
+var player = GameObject;
+
+function Start() {
+  Manage_background();
+  MakePlayer();
+}
+
+function Manage_background(){
+  //Making background  (abhi cache disable kia hai , last mein ek resource loader banayenge)
+  var bgd = new Image();
+  bgd.src = "bg.png";
+  context.drawImage(bgd, 0, 0);
+  //Making Trees
+  let i;
+ for (i = 0; i < 100; i++) {
+    let tree = new GameObject("tree", "tree_A.png", (Math.random() * 1000), (Math.random() * 1000),0,0).make(context);
+    }
+}
+
+function MakePlayer(){
+    player = new GameObject("player","player_sheet.png",0,0,64,64);
+    player.AddAnimation("idle",10,1);// We add an idle animation , which exists on the 10th row to the 1st coloumn
+    player.AddAnimation("walk_right",11,9); // We add a walking animation , which exists on the 11th row to the 9th coloumn
+    player.AddAnimation("walk_left",9,9);// same cheez baki sab mein ez
+    player.AddAnimation("walk_up",8,9);
+    player.AddAnimation("walk_down",10,9);
+}
+
+function Update() {
+//  player.PlayAnimation("idle",context);
+  if (rightinput)
+  player.PlayAnimation("walk_right",context);
+
+  if (leftinput)
+  player.PlayAnimation("walk_left",context);
+
+  if (upinput)
+  player.PlayAnimation("walk_up",context);
+
+ if (downinput)
+ player.PlayAnimation("walk_down",context);
+
+if (!rightinput && !leftinput && !upinput && !downinput)
+ player.PlayAnimation("idle",context);
+
+
+}
+
+
+
+//Managing Inputs
+let leftinput = false;
+let rightinput = false;
+let upinput = false;
+let downinput = false;
+
 document.addEventListener("keydown", function(e) {
   console.log(e.which);
-  if (e.keyCode == 68) { //MOVE RIGHT
-    current_anim = 1;
-    x += 1;
-  }
-
-  if (e.keyCode == 87) { //MOVE UP
-    current_anim = 3;
-    y -= 1;
-  }
-  if (e.keyCode == 65) { //MOVE LEFT
-    current_anim = 2;
-    x -= 1;
-  }
-  if (e.keyCode == 83) { //MOVE UP
-    current_anim = 4;
-    y += 1;
-  }
+  if (e.keyCode == 68)  //MOVE RIGHT
+  rightinput = true;
+  if (e.keyCode == 87)  //MOVE UP
+   upinput = true;
+  if (e.keyCode == 65)  //MOVE LEFT
+   leftinput = true;
+  if (e.keyCode == 83)  //MOVE DOWN
+    downinput  = true;
 });
 
 document.addEventListener("keyup", function(e) {
-  current_anim = 0;
+   leftinput = false;
+   rightinput = false;
+   upinput = false;
+   downinput = false;
 });
 
-document.addEventListener("load", function() {
+document.addEventListener("DOMContentLoaded", function() {
   Start();
 });
 
-// Draw background using Promise.
-
-function loadImage(path) {
-  return new Promise((resolve) => {
-    let image = new Image();
-    image.src = path;
-    image.addEventListener('load', function() {
-      // for(let i=0; i<100; i++)
-      resolve(image);
-    });
-
-  });
-}
-
-
-
-// SIRF ANIMATION
-
-
-let spritesheet = new Image(); // LOAD HUA SHEEY
-spritesheet.src = "player_sheet.png";
-
-
-
-let OBJ_A = new Image();
-OBJ_A.src = "tree_A.png";
-let current_anim = 0; // ANIMATION PLAY  0-IDLE   1-WALK RIGHT   2-WALK LEFT 3-WALK UP 4-WALK DOWN
-let anim_data_column = new Array(1, 9, 9, 9, 9);
-let anim_data_row = new Array(10, 11, 9, 8, 10);
-
-let x = 50;
-let y = 50;
-let srcX;
-let srcY;
-
-let col = 0;
-let row = 0;
-let width = 64;
-let height = 64;
-let currentframe = 0;
-
-
-let posx = [];
-let posy = [];
-let i;
-
-
-
-function updateFrame() {
-  srcX = currentframe * width;
-  srcY = height * anim_data_row[current_anim];
-  currentframe = ++currentframe % anim_data_column[current_anim];
-  currentframe++;
-  if (currentframe >= anim_data_column[current_anim])
-    currentframe = 0;
-  // context.clearRect(0, 0, windowWidth, windowHeight); //KYU DALA YE
-
-  // context.clearRect(x,y,width,height);
-  loadImage('bg.png').then(image => {
-    console.log('heloo');
-    context.drawImage(image, 0, 0); //DRAW BACKGROUND
-    console.log(image);
-  });
-  context.drawImage(spritesheet, srcX, srcY, width, height, 400, 250, width, height);
-  requestAnimationFrame(updateFrame); // Always use
-
-}
-
-updateFrame();
-
-function Start() {
-
-  console.log('asodnaisnd')
-  for (i = 0; i < 100; i++) {
-    // let tree = new GameObject("tree", OBJ_A, (Math.random() * 1000), (Math.random() * 1000)).make(context);
-  }
-}
+setInterval(function(){
+  Update();
+},100);
