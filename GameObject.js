@@ -1,4 +1,5 @@
 export default class GameObject{
+  
   constructor(name, sprite, xpos, ypos,width,height){
     this.name = name;
     this.sprite = new Image();
@@ -43,33 +44,19 @@ export default class GameObject{
   }
 
   PlayAnimation(name,context){
-    // console.log(this.anims.length,'animslength')
-    this.currentframe=0;
-    for (this.i = 0; this.i < this.anims.length; this.i++){
-      if (this.anims[this.i] == name){
+    for ( this.i = 0 ; this.i < this.anims.length ; this.i++)
+     if (this.anims[this.i] == name)
+       this.current_anim = this.i;
 
-        // console.log(this.current_anim);
-        this.current_anim = this.i;
-        // console.log(this.current_anim, 'current_anim');
-      }
-    }
-    // console.log(this.currentframe, 'current_frame');
-    this.srcX = this.currentframe * this.width;
-    // console.log(this.srcX);
-    this.srcY = this.height * this.anim_data_row[this.current_anim];
-    this.currentframe = ++this.currentframe % this.anim_data_column[this.current_anim];
-    this.currentframe++;
-    // console.log(this.anim_data_row, 'current_frame');
-    // console.log(this.currentframe)
-    // console.log(this.current_anim)
+       this.srcX =  this.currentframe * this.width;
+       this.srcY = this.height * this.anim_data_row[this.current_anim];
+    //   this.currentframe = ++this.currentframe % this.anim_data_column[  this.current_anim];
+       this.currentframe++;
+    if (this.currentframe >= this.anim_data_column[this.current_anim])
+         this.currentframe = 0;
 
-    // console.log(this.anim_data_column[  this.current_anim])
-    if (this.currentframe >= this.anim_data_column[this.current_anim]){
-      this.currentframe = 0;
-    }
-    // console.log(this.current_frame, 'current_anim');
-    context.clearRect(this.xpos,this.ypos,this.width,this.height); //!!!!!DOING THIS MAKES A WHITE BACKGROUND WHICH MESSES EVERYTHING , PURA BACKGROUND DRAW KARNA PADEGA VAAPAS !!!!!!!!! ISSUE TO BE FIXED
-    context.drawImage(this.sprite, this.srcX, this.srcY, this.width, this.height, this.xpos, this.ypos, this.width, this.height);
+      context.clearRect(this.xpos,this.ypos,this.width,this.height); //!!!!!DOING THIS MAKES A WHITE BACKGROUND WHICH MESSES EVERYTHING , PURA BACKGROUND DRAW KARNA PADEGA VAAPAS !!!!!!!!! ISSUE TO BE FIXED
+       context.drawImage(this.sprite, this.srcX, this.srcY, this.width, this.height, this.xpos, this.ypos, this.width, this.height);
   }
 }
 
