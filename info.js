@@ -1,5 +1,5 @@
 import GameObject from './GameObject.js';
-
+import {loadBackGround, loadTrees, loadPlayer} from './ResourceLoader.js';
 
 const windowWidth = window.innerWidth;
 const windowHeight = window.innerHeight;
@@ -15,42 +15,41 @@ body.appendChild(canvas);
 const context = canvas.getContext('2d');
 
 
+Promise.all([
+  loadBackGround(), loadTrees()
+])
+.then(([background, tree]) => {
+  context.drawImage(background, 0, 0);
+  randomSpawn(tree, context, 100);
 
+});
 
-
-
-var player = GameObject;
-
-function Start() {
-  Manage_background();
-  MakePlayer();
+function randomSpawn(image, context, num){
+  for(let i=0; i<num; i++){
+    context.drawImage(image, Math.random()*2000, Math.random()*2000);
+  }
 }
 
-function Manage_background(){
-  //Making background  (abhi cache disable kia hai , last mein ek resource loader banayenge)
-  var bgd = new Image();
-  bgd.src = "bg.png";
-  context.drawImage(bgd, 0, 0);
-  //Making Trees
-  let i;
- for (i = 0; i < 100; i++) {
-    let tree = new GameObject("tree", "tree_A.png", (Math.random() * 1000), (Math.random() * 1000),0,0).make(context);
-    }
-}
+var player=GameObject;
 
 function MakePlayer(){
     player = new GameObject("player","player_sheet.png",0,0,64,64);
     player.AddAnimation("idle",10,1);// We add an idle animation , which exists on the 10th row to the 1st coloumn
-    player.AddAnimation("walk_right",11,9); // We add a walking animation , which exists on the 11th row to the 9th coloumn
+    player.AddAnimation("walk_right",11,10); // We add a walking animation , which exists on the 11th row to the 9th coloumn
     player.AddAnimation("walk_left",9,9);// same cheez baki sab mein ez
     player.AddAnimation("walk_up",8,9);
     player.AddAnimation("walk_down",10,9);
 }
 
+// MakePlayer();
+
 function Update() {
-//  player.PlayAnimation("idle",context);
-  if (rightinput)
-  player.PlayAnimation("walk_right",context);
+  // console.log('hua call');
+ player.PlayAnimation("idle",context);
+  if (rightinput){
+      player.PlayAnimation("walk_right",context);
+      // console.log('hua re hua');
+  }
 
   if (leftinput)
   player.PlayAnimation("walk_left",context);
@@ -64,7 +63,7 @@ function Update() {
 if (!rightinput && !leftinput && !upinput && !downinput)
  player.PlayAnimation("idle",context);
 
-
+ // requestAnimationFrame(Update); // londa nhi dikhra isme
 }
 
 
@@ -75,7 +74,7 @@ let rightinput = false;
 let upinput = false;
 let downinput = false;
 
-document.addEventListener("keydown", function(e) {
+document.addEventListener("keydown", e => {
   console.log(e.which);
   if (e.keyCode == 68)  //MOVE RIGHT
   rightinput = true;
@@ -94,8 +93,8 @@ document.addEventListener("keyup", function(e) {
    downinput = false;
 });
 
-document.addEventListener("DOMContentLoaded", function() {
-  Start();
+document.addEventListener('DOMContentLoaded', () => {
+  MakePlayer();
 });
 
 setInterval(function(){
