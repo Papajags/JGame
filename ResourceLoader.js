@@ -16,6 +16,7 @@ export function loadTrees(){
 
 export function loadPlayer(){
   return loadImage('player_sheet.png').then(image => {
+    console.log('player loaded');
     return image;
   });
 }
